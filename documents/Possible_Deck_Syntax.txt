@@ -1,0 +1,16 @@
+Possible deck syntaxes:
+
+Foreach combine(t1, t2, t3) make();
+Foreach combine(t1, t2) make(t3);
+Foreach t1 make(t2, t3);
+
+make(t1, t2, t3);
+
+
+
+
+
+-------------------------
+Stretch goals:
+
+Foreach range(n,1,13,2) make(n)  # Makes 1, 3, 5, 7, 9, 11
