@@ -1,11 +1,11 @@
-# A sample deck of standard playing cards.
-
 Traits: suit, number
 
 suit - Any: heart, club, diamond, spade
 number - Num: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 
 
+
 Cards:
     Foreach combine(suit, number) make();
+    make(purple, 5);
 

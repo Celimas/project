@@ -3,35 +3,36 @@
 
 (* 'deck' is the start rule *)
 
-deck = traits cards $ ;
+deck = traits:traits cardrules:cards $ ;
 
 
 (* Rules for deifning traits *)
 
-traits = trait_names { trait_def } ;
+traits = names:trait_names { defs+:trait_def } ;
 
 trait_names = "Traits:" @+:trait_name {',' @+:trait_name } ; (* note, this could eventually allow for 0 traits somehow *)
 trait_name = @:alphanumeric ;
 
-trait_def = trait_name '-' typed_collection ;
-typed_collection = ( "Boolean" )
-                 | ( "Num" ':' numeric { ',' numeric } )
-                 | ( "Any" ':' alphanumeric { ',' alphanumeric } ) ;
+trait_def = name:trait_name '-' typevals:typed_collection ;
+typed_collection = ( type:"Boolean" )
+                 | ( type:"Num" ':' vals+:numeric { ',' vals+:numeric } )
+                 | ( type:"Any" ':' vals+:alphanumeric { ',' vals+:alphanumeric } ) ;
 
 
 (* Rules for listing cards *)
 
 cards = "Cards:" @+:card_rule { @+:card_rule } ;
 
-card_rule = [ foreach_rule ] make_rule ';' ;
+card_rule = [ foreach:foreach_rule ] make:make_rule ';' ;
 
-foreach_rule = 'Foreach' traits_rule ;
-traits_rule = combine_rule | alphanumeric
-combine_rule = "combine(" { alphanumeric { ',' alphanumeric } } ')' ;
+foreach_rule = 'Foreach' @:traits_rule ;
+traits_rule = @:combine_rule | @:alphanumeric ;
+combine_rule = "combine(" { combine+:alphanumeric { ',' combine+:alphanumeric } } ')' ;
 
-make_rule = "make(" [ alphanumeric { ',' alphanumeric } ] ')' ;
+(* Note, this currently doesn't handle empty make rules well *)
+make_rule = "make(" [ @+:alphanumeric { ',' @+:alphanumeric } ] ')' ;
 
 
 (* helper rules *)
-alphanumeric = /[a-z0-9]+/
-numeric = /[0-9]+/
+alphanumeric = /[a-z0-9]+/ ;
+numeric = /[0-9]+/ ;
