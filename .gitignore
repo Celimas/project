@@ -1,0 +1,5 @@
+# I will try to always compile grako to files that begin with g_
+g_*
+
+# Don't include compiled python code
+*.pyc
