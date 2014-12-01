@@ -17,6 +17,10 @@ class Deck:
         """ Adds a card to the deck """
         self.cards.append(card)
 
+    def addTrait(self, trait):
+        """ Adds a trait to the deck """
+        self.traits.append(trait)
+
 class Card:
     """ A datatype representing a card """
     def __init__(self):
