@@ -20,7 +20,7 @@ typed_collection = ( type:"Boolean" )
 
 (* Rules for listing cards *)
 
-cards = "Cards:" @+:card_rule { @+:card_rule } ;
+cards = "Cards" ':' { @+:card_rule } ;
 
 card_rule = [ foreach:foreach_rule ] make:make_rule ;
 
