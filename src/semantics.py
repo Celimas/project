@@ -5,7 +5,7 @@ class deckSemantics(object):
     deck = Deck()
 
     def deck(self, ast):
-        print "Finished processing deck:" + deck
+        print "Finished processing deck: " + deck
         return ast
 
     def traits(self, ast):
@@ -16,7 +16,24 @@ class deckSemantics(object):
         return ast
 
     def trait_def(self, ast):
-        t = Trait(name, type) #TODO: Make this get values from the AST
+        traitname = "" #TODO, get name
+        traittype = "" #TODO get type
+
+        if traittype == "Boolean":
+            traitvals = [True, False]
+
+        elif traittype == "Num":
+            traitvals = [1] #TODO get nums (and typecheck them)
+
+        elif traittype == "Any":
+            traitvals = [""] #TODO get strings
+            
+        else:
+            print "Parse Error: Invalid type on trait: " + traitname
+            exit(-1) #TODO learn how to do this
+
+
+        t = Trait(traitname, traittype, traitvals)
         print "  Adding" + t + "to traits"
         deck.addTrait(t)
         return ast
