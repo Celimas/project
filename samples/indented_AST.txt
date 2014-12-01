@@ -1,0 +1,49 @@
+AST({
+	u'traits': 
+		[
+		AST({
+			u'typevals': 
+				AST({
+					u'vals': [u'heart', u'club', u'diamond', u'spade'], 
+					u'type': u'Any'
+				}), 
+			u'name': u'suit'
+		}), 
+		AST({
+			u'typevals': 
+				AST({
+					u'vals': [u'1', u'2', u'3', u'4', u'5', u'6', u'7', u'8', u'9', u'10', u'11', u'12', u'13'], 
+					u'type': u'Num'
+				}), 
+			u'name': u'number'
+		}), 
+		AST({
+			u'typevals': AST({u'vals': [], u'type': u'Boolean'}), 
+			u'name': u'good'
+		})
+		], 
+	u'cardrules': 
+		[
+		AST({
+			u'make': 
+				AST({
+					u'num': u'1', 
+					u'names': [u'true']
+				}), 
+			u'foreach': 
+				AST({
+					u'combine': [u'suit', u'number']
+				})
+		}), 
+		AST({
+			u'make': 
+				AST({
+					u'num': u'1', 
+					u'names': [u'club', u'5', u'false']
+				}), 
+			u'foreach': None
+		})
+		]
+})
+
+
