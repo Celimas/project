@@ -1,0 +1,25 @@
+# A deck of playing cards with an extra 5 of clubs
+Traits:
+    suit - Any: heart, club, diamond, spade
+    number - Num: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+    good - Boolean
+
+
+Cards:
+    Foreach combination_of(suit, number) make(1, true)
+    make(1, club, 5, false)
+
+
+
+# Legacy Burn
+Traits:
+    type - Any: creature, land, spell, enchantment
+    cost - Num: 0,1,2,3,4
+    toTheFace - Boolean
+
+Cards:
+    make(16, land, 0, false)
+    make(24, spell, 1, true)
+    make(8, creature, 1, true)
+    make(8, spell, 2 true)
+    make(4, enchantment, 3, true)
