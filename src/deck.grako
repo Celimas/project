@@ -3,7 +3,10 @@
 
 (* 'deck' is the start rule *)
 
-deck = traits:traits cardrules:cards $ ;
+deck = comments traits:traits cardrules:cards $ ;
+
+(* Any amount of comments at the top of the file *)
+comments = { nonspace } ;
 
 
 (* Rules for deifning traits *)
@@ -33,5 +36,6 @@ make_rule = "make(" num:numeric { ',' names+:alphanumeric } ')' ;
 
 
 (* helper rules *)
+nonspace = /[^A-Z\s]+/ ;
 alphanumeric = /[a-z0-9]+/ ;
 numeric = /[0-9]+/ ;
