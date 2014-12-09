@@ -1,3 +1,7 @@
+a deck of bad playing cards.
+note that any amount of comments can be before the traits command, 
+as long as there are no capital letters!
+
 Traits:
     suit - Any: heart, club, diamond, spade
     number - Num: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
