@@ -8,24 +8,32 @@
 import g_deck
 import semantics
 
-def main(filename, startrule, trace=False, whitespace=None, nameguard=None):
+def main(filename, trace=False, whitespace=None, nameguard=None):
     import json
     with open(filename) as f:
         text = f.read()
     parser = g_deck.deckParser(parseinfo=False)
-    ast = parser.parse(
+    print "Beginning parsing of deck."
+    deck = parser.parse(
         text,
-        startrule,
+        "deck",   # start rule is now hard-coded as deck
         filename=filename,
         trace=trace,
         whitespace=whitespace,
-        nameguard=nameguard)
+        nameguard=nameguard,
+        semantics=semantics.DeckSemantics())  # Use my semantics
+
+    print "Result: " + str(deck)
+
+    # Stuff for printing the AST and JSON, no longer need it
+    '''
     print('AST:')
     print(ast)
     print
     print('JSON:')
     print(json.dumps(ast, indent=2))
     print
+    '''
 
 if __name__ == '__main__':
     import argparse
@@ -51,13 +59,10 @@ if __name__ == '__main__':
     parser.add_argument('-w', '--whitespace', type=str, default=string.whitespace,
                         help="whitespace specification")
     parser.add_argument('file', metavar="FILE", help="the input file to parse")
-    parser.add_argument('startrule', metavar="STARTRULE",
-                        help="the start rule for parsing")
     args = parser.parse_args()
 
     main(
         args.file,
-        args.startrule,
         trace=args.trace,
         whitespace=args.whitespace,
         nameguard=not args.no_nameguard

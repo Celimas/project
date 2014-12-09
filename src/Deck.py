@@ -31,6 +31,9 @@ class Deck:
         """ Checks if value is a valid value for traitname """
         return value in self.traits[traitname].vals
 
+    def __str__(self):
+        return "Deck object with " + str(len(self.cards)) + " cards, using " + str(len(self.trait_names)) + " traits."
+
 class Card:
     """ A datatype representing a card """
     def __init__(self, values):
@@ -50,4 +53,4 @@ class Trait:
         self.vals = vals    # values is the possible values of the trait
 
     def __str__(self):
-        return "Trait -- Name: " + self.name + "\n         Type: " + self.t + "\n         Vals: " + self.vals
+        return "Trait -- Name: " + self.name + "\n         Type: " + self.t + "\n         Vals: " + str(self.vals)

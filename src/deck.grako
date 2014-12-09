@@ -28,8 +28,8 @@ cards = "Cards" ':' { @+:card_rule } ;
 card_rule = [ foreach:foreach_rule ] make:make_rule ;
 
 foreach_rule = 'Foreach' @:traits_rule ;
-traits_rule = @:combine_rule | @:alphanumeric ;
-combine_rule = "combination_of(" combine+:alphanumeric { ',' combine+:alphanumeric } ')' ;
+traits_rule = @:combine_rule | @+:alphanumeric ;
+combine_rule = "combination_of(" @+:alphanumeric { ',' @+:alphanumeric } ')' ;
 
 (* Note, first argument is number to make *)
 make_rule = "make(" num:numeric { ',' names+:alphanumeric } ')' ;
