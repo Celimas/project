@@ -1,0 +1,11 @@
+Traits:
+    type - Any: creature, land, spell, enchantment
+    cost - Num: 0,1,2,3,4
+    toTheFace - Boolean
+
+Cards:
+    make(16, land, 0, false)
+    make(24, spell, 1, true)
+    make(8, creature, 1, true)
+    make(8, spell, 2 true)
+    make(4, enchantment, 3, true)

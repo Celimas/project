@@ -1,0 +1,11 @@
+Traits:
+    suit - Any: heart, club, diamond, spade
+    number - Num: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+    good - Boolean
+
+
+Cards:
+    Foreach combination_of(suit, number) make(1, true)
+    make(1, club, 5, false)
+
+
