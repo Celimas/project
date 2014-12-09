@@ -1,5 +1,12 @@
-# A temporary file for my semantics with post-processing
-import Deck # Fix this to get the Deck.py file
+# Tyler Marklyn
+# semantics.py
+#
+#
+# This file includes the semantics for parsing a deck object
+#
+#
+
+from Deck import * 
 from itertools import product
 from copy import deepcopy
 
@@ -10,12 +17,11 @@ class InvalidDeckError(Exception):
     def __str__(self):
         return repr(self.message)
 
+deck_of_cards = Deck()
 
 class deckSemantics(object):
-    deck = Deck()
-
     def deck(self, ast):
-        print "Finished processing deck: " + deck
+        print "Finished processing deck: " + deck_of_cards
         return ast
 
     def traits(self, ast):
@@ -44,7 +50,7 @@ class deckSemantics(object):
 
         t = Trait(traitname, traittype, traitvals)
         print "  Adding" + t + "to traits"
-        deck.addTrait(t)
+        deck_of_cards.addTrait(t)
         return ast
 
     def typed_collection(self, ast):
@@ -63,11 +69,11 @@ class deckSemantics(object):
         make_dict = {}
         argcounter = 0
 
-        for trait_name in deck.trait_names:
+        for trait_name in deck_of_cards.trait_names:
             if trait_name not in foreach_traits:
                 value = make_values[argcounter]
                 
-                if not deck.checkValidVal(trait_name, value):
+                if not deck_of_cards.checkValidVal(trait_name, value):
                     raise InvalidDeckError(str(value) + " is not a valid value for " + trait_name)
 
                 make_dict[trait_name] = value
@@ -76,7 +82,7 @@ class deckSemantics(object):
         # Now we process the foreach part of the rule
         foreach_trait_vals = [] # a list of lists of vals for the traits
         for trait_name in foreach_traits:
-            foreach_trait_vals.append(deck.getValsForTrait(trait_name))
+            foreach_trait_vals.append(deck_of_cards.getValsForTrait(trait_name))
 
         all_foreach_combinations = list(product(*foreach_trait_vals))
 
