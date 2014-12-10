@@ -25,11 +25,11 @@ lot of implementation issues that you will not want to deal with in the week rem
 Spitting out an actual number will probably be harder than anticipated. Here are a few
 things that jumped out to me that might not be trivial:
 
-  *When you say "OR", it's often not clear how to combine the probabilities of the two
+  * When you say "OR", it's often not clear how to combine the probabilities of the two
 separate things to get the chance that one or the other happens. In the worst case,
 this turns into a messy PIE problem that you may or may not remember from Discrete.
 
-  *It might not be particularly to even get things like "AND" right when you consider
+  * It might not be particularly to even get things like "AND" right when you consider
   drawing without replacement. Again, this can't simply be computed by computing two
   probabilities and multiplying, since you might use a card in both.
   
