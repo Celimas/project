@@ -4,7 +4,7 @@
 #
 # The Python file containing the underlying data structures for the
 # Deck language in my DSLs Project
-#
+# 
 
 class Deck:
     """ A datatype representing a deck of cards """
