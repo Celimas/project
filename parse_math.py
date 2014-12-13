@@ -4,14 +4,14 @@
 #
 # The file containing the main method to parse a calculation list for Math
 #
-import g_math
-import MathSemantics
+import src.g_math as g_math
+import src.MathSemantics as MathSemantics
 
 def main(filename, trace=False, whitespace=None, nameguard=None):
     import json
     with open(filename) as f:
         text = f.read()
-    parser = g_math.MathParser(parseinfo=False)
+    parser = g_math.mathParser(parseinfo=False)
     print "Beginning parsing of math."
     deck = parser.parse(
         text,
