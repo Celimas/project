@@ -21,7 +21,7 @@ def main(filename, trace=False, whitespace=None, nameguard=None):
         trace=trace,
         whitespace=whitespace,
         nameguard=nameguard,
-        semantics=DeckSemantics.DeckSemantics())  # Use my semantics
+        semantics=DeckSemantics.DeckSemantics(debug=True))  # Use my semantics
 
     print "Result: " + str(deck)
 

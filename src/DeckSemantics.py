@@ -9,7 +9,6 @@
 from Deck import * 
 from itertools import product
 from copy import deepcopy
-from Debug import DEBUG
 
 class InvalidDeckError(Exception):
     def __init__(self, message):
@@ -19,20 +18,21 @@ class InvalidDeckError(Exception):
         return repr(self.message)
 
 
-deck_of_cards = Deck()
-
 class DeckSemantics(object):
+    def __init__(self, debug=True):
+        self.debug = debug
+        self.deck_of_cards = Deck()
 
     def deck(self, ast):
         print "Finished processing deck."
-        return deck_of_cards
+        return self.deck_of_cards
 
     def comments(self, ast):
-        if DEBUG: print "Processing traits."
+        if self.debug: print "Processing traits."
         return ast
 
     def traits(self, ast):
-        if DEBUG: print "Finished processing traits. Processing cards."
+        if self.debug: print "Finished processing traits. Processing cards."
         return ast
 
     def trait_def(self, ast):
@@ -53,12 +53,12 @@ class DeckSemantics(object):
 
 
         t = Trait(traitname, traittype, traitvals)
-        if DEBUG: print " Parsed: " + str(t)
-        deck_of_cards.addTrait(t)
+        if self.debug: print " Parsed: " + str(t)
+        self.deck_of_cards.addTrait(t)
         return ast
 
     def cards(self, ast):
-        if DEBUG: print "Finished processing cards"
+        if self.debug: print "Finished processing cards"
         return ast
 
     def card_rule(self, ast):
@@ -74,11 +74,11 @@ class DeckSemantics(object):
         make_dict = {}
         argcounter = 0
 
-        for trait_name in deck_of_cards.trait_names:
+        for trait_name in self.deck_of_cards.trait_names:
             if trait_name not in foreach_traits:
                 value = make_values[argcounter]
                 
-                if not deck_of_cards.checkValidVal(trait_name, value):
+                if not self.deck_of_cards.checkValidVal(trait_name, value):
                     raise InvalidDeckError(str(value) + " is not a valid value for " + trait_name)
 
                 make_dict[trait_name] = value
@@ -87,7 +87,7 @@ class DeckSemantics(object):
         # Now we process the foreach part of the rule
         foreach_trait_vals = [] # a list of lists of vals for the traits
         for trait_name in foreach_traits:
-            foreach_trait_vals.append(deck_of_cards.getValsForTrait(trait_name))
+            foreach_trait_vals.append(self.deck_of_cards.getValsForTrait(trait_name))
 
         all_foreach_combinations = list(product(*foreach_trait_vals))
 
@@ -98,11 +98,11 @@ class DeckSemantics(object):
             for i in range(len(foreach_traits)):
                 card_dict[foreach_traits[i]] = combo[i]
 
-            if DEBUG: print "Adding " + str(make_n) + " card(s) with value(s): " + str(card_dict)
+            if self.debug: print "Adding " + str(make_n) + " card(s) with value(s): " + str(card_dict)
 
             # Make the cards
             for n in range(make_n):
-                deck_of_cards.addCard(Card(card_dict))
+                self.deck_of_cards.addCard(Card(card_dict))
 
 
         return ast
