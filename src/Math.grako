@@ -1,6 +1,6 @@
 (* Grako Grammar for Tyler Marklyn's Math Language *)
 
-math = comments decks definitions calculations ;
+math = comments decks:decks defs:definitions calcs:calculations $ ;
 
 (* Any amount of comments at the top of the file *)
 comments = { nonspace } ;
@@ -8,12 +8,12 @@ comments = { nonspace } ;
 (* Rules for importing decks *)
 decks = "Decks" ':' { @+:deck_name } ; 
 
-deck_name = alphanumeric ;
+deck_name = nonspace ;
 
 (* Rules for defining named combinations *)
 definitions = "Definitions" ':' { @+:definition } ;
 
-definition = name:alphanumeric '=' sets:card_sets ;
+definition = name:nonspace '=' sets:card_sets ;
 
 card_sets = set:card_set { with+:secondary_card_set } ;
 
@@ -29,12 +29,15 @@ conjunction = "Seperate" | "Shared" | "Or" ;
 (* Rules for requesting calculations *)
 calculations = "Calculations" ':' { @+:calculation } ;
 
-calculation = '{' [ "Known" ':' known:calc_set ] 
+calculation = '{' [ "Cards" ':' cards:numeric ]
+                  [ "Known" ':' known:calc_set ]
                   [ "Draws" ':' draws:numeric ]
-                  [ "Odds" ':' odds:calc_set ] '}' ;
+                  [ "Odds" ':' odds:calc_set '-' exists:existence ] '}' ;
 
-calc_set = ( variable:alphanumeric )
-         |   set:card_sets ;
+calc_set = ( variable:nonspace )
+         | ( sets:card_sets ) ;
+
+existence = "Present" | "Not-present" | "Exact" ;
 
 
 (* helper rules *)

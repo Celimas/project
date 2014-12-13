@@ -1,0 +1,31 @@
+a sample math program that runs basic calculations
+on the bad_cards deck
+
+Decks: bad_cards
+
+Definitions:
+	pair = 2x(number, Same)
+	3_of_a_kind = 3x(number, Same)
+	4_of_a_kind = 4x(number, Same)
+	flush = 5x(suit, Same)
+
+	has_bad = (good, false)
+
+Calculations:
+	{ Draws: 2
+	  Odds: has_bad - Not-present}
+
+	{ Draws: 5
+	  Odds: pair - Present}
+
+	{ Draws: 7 Odds: pair - Present }
+
+	{ Draws: 5 Odds: 3_of_a_kind - Present }
+
+	{ Cards: 2 Known: pair
+	  Draws: 5 Odds: 3_of_a_kind - Present }
+
+	{ Draws: 5 Odds: 4_of_a_kind - Present }
+
+	{ Draws: 7 Odds: 4_of_a_kind - Present }
+
