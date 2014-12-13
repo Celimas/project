@@ -1,5 +1,5 @@
 # Tyler Marklyn
-# semantics.py
+# DeckSemantics.py
 #
 #
 # This file includes the semantics for parsing a deck object
@@ -19,6 +19,7 @@ class InvalidDeckError(Exception):
 
 
 deck_of_cards = Deck()
+DEBUG = False
 
 class DeckSemantics(object):
 
@@ -27,11 +28,11 @@ class DeckSemantics(object):
         return deck_of_cards
 
     def comments(self, ast):
-        print "Processing traits."
+        if DEBUG: print "Processing traits."
         return ast
 
     def traits(self, ast):
-        print "Finished processing traits. Processing cards."
+        if DEBUG: print "Finished processing traits. Processing cards."
         return ast
 
     def trait_def(self, ast):
@@ -52,12 +53,12 @@ class DeckSemantics(object):
 
 
         t = Trait(traitname, traittype, traitvals)
-        print " Parsed: " + str(t)
+        if DEBUG: print " Parsed: " + str(t)
         deck_of_cards.addTrait(t)
         return ast
 
     def cards(self, ast):
-        print "Finished processing cards"
+        if DEBUG: print "Finished processing cards"
         return ast
 
     def card_rule(self, ast):
@@ -97,7 +98,7 @@ class DeckSemantics(object):
             for i in range(len(foreach_traits)):
                 card_dict[foreach_traits[i]] = combo[i]
 
-            print "Adding " + str(make_n) + " card(s) with value(s): " + str(card_dict)
+            if DEBUG: print "Adding " + str(make_n) + " card(s) with value(s): " + str(card_dict)
 
             # Make the cards
             for n in range(make_n):
