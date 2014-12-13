@@ -9,6 +9,7 @@
 from Deck import * 
 from itertools import product
 from copy import deepcopy
+from Debug import DEBUG
 
 class InvalidDeckError(Exception):
     def __init__(self, message):
@@ -19,7 +20,6 @@ class InvalidDeckError(Exception):
 
 
 deck_of_cards = Deck()
-DEBUG = False
 
 class DeckSemantics(object):
 
