@@ -97,6 +97,7 @@ key data structures, namely
 
 
 ## Example Programs
+Here are a few programs in the Deck and Math languages. Please refer to the README on the git repository for instructions on executing them.
 
 First, we see a program in Deck that specifies a deck of playing cards, with an extra 5 of clubs shuffled in. We can image this 5 of clubs has a different back than the rest of the cards, making it "Bad" if you draw it, hence the "good" trait. This program can also be found in `samples/bad_cards.deck`.
 ```
@@ -163,4 +164,111 @@ This file will import bad_cards.deck, and then do a bunch of probability calcula
 Also, in the definitions section, we see that you can specify the traits on sets of cards as being the Same (or Different), or you can specify actual values for the traits using lowercase letters (and numbers).
 
 ## Language implementation
+
+I chose to make an external DSL because I am not expanding a feature that already exists in a language, and therefore I find it more intuitive to design a syntax from scratch, rather than trying to design it to fit within a given host language.
+I then chose Python to implement the semantics of the language for two reasons:
+ 1. It's a familiar object-oriented language for development
+ 1. SciPy features a number of the mathematical calculations and graphical outputs I could see myself needing to perform/generate
+
+I decided a lot of invalid programs will have valid syntax and not fail until semantics-time. I made this decision because it is very hard to specify the same text applying at various points in a grammar (across rules). It made sense to allow for anything that could be simply parsed, and then fail at run-time when it is easy to see that an argument to a function is missing. The key here will be still providing helpful error messages.
+
+My system works as follows:
+ 1. Parse the Deck file. This generates a `Deck` object in Python.
+ 1. Parse the Math file. This generates a `Query`s as it goes.
+ 1. For each `Query`, check if it will produce valid output from the `Deck`. If it does, produce it.
+
+Specifically, I implemented these steps using Grako, a Parser Generator library for Python. Grako allows you to specify a grammar, with semantic rules to be applied after a successful parse on each rule in the grammar. The grammars for Deck and Math can be found in `src/deck.grako` and `src/math.grako` respectively, with their semantics in `src/DeckSemantics.py` and `src/MathSemantics.py` respectively. These semantics objects get passed into the parser generate by grako.
+
+### Deck implementation
+
+In Deck, the structure of a program is very similar to the structure of the semantics. First the program specifies a list of traits that will be present, and similarly as it parses them, my parser generates *Trait* objects, which get stored in my Intermediate Representation (in the form of a *Deck* object).
+
+Then comes the card section of the file. This section required some interesting techniques. Namely, my language allows for a
+"for each combination of" construct that then takes any number of traits as arguments. Normally in Python, I would make a number of `for` loops corresponding to each trait that is an argument, but since the number of arguments is not known ahead of time, that method would not work.
+Thus, I had to use a couple of cool Python features to get it to work, namely using a built-in generator that generates all possible combinations of elements in a list (which I pass in using the `*` operator), and then iterating over those to create the cards. This all happens inthe `card_rule` method in DeckSemantics. Also in that function, we see a little more magic that was requried to then iterate over all the traits that were *not* in the foreach in order to make sure that the values in the `make` portion of the rule correspond to them.
+
+The other little bit of Python-y weirdness that needed to happen for Deck to work was the following quirk: Grako parses everything as strings, but when Traits were typed as Boolean or Number, I wanted their values to be booleans or numbers. This was simple enough to do as I was processing the trait, and had the type information right there, but when I was processing a make rule, I needed to try converting things.
+
+This meant that I had to use my `getMakeVal` function which does a bizzare series of attempted string matches followed by a `try except` block to get everything to be the type it should be.
+
+### Math implementation
+
+Unfortunately, this largely does not yet exist. The parser is there, but any IR and semantics do not exist yet, as the problem ended up being larger than one I could tackle in 6 weeks.
+
+
+## Evaluation
+
+### The Good
+
+I'm very pleased with using *grako* to generate parsers in Python. It's really
+nice to be able to specify a grammar and have the parser pop out ready-made for
+your task. All that remains is to specify semantics and an IR at that point, which is
+generally not that bad. 
+
+Using this scheme, Deck went from non-existent to fully-implemented in the span of about
+a week and a half. It took one week to get the grammar working, and then another week
+to specify the IR and the semantics, which I found it helpful to do hand-in-hand.
+Namely, whenever I found myself needing a feature in Semantics (i.e. a list of traits
+in the deck), I would add it to the IR, and whenever I felt like the IR should hold more
+data than it was holding, it was easy to add it to the parser and the semantics in a sort
+of feedback loop.
+
+I'm fairly pleased with how Deck turned out as a result of this. The syntax could be cleaned
+up in a few places, but I'm happy with the IR and the debug output, and the error handling.
+I think I accomplished my goal of specifying large decks in as few lines as possible, given 
+how small my deck files have ended up being (i.e. the two in the Example Programs section).
+
+I think that moving forwards into the future of this project as a more independent project
+not associated with any class, aside from a few cosmetic changes to the grammar, the majority
+of the IR and the semantics for Deck will remain the same, which is a good feeling.
+
+### The Bad
+
+Unfortunately a week to learn grako, and then another week to get everything actually working
+with grako. Seeing as the project itself only had 6 weeks to be completed, with one of these
+weeks being over Thanksgiving, that did not leave me with enough time to actually tackle the 
+Math language in any sort of depth.
+
+I also lost about a week to catching up on Python, especially in terms of learning how to 
+seperate code across files, and reading up on Python libaries such as SciPy. 
+I haven't used Python on a project of this scale before, so I had
+to learn how imports and folder packaging and such work. Overall, I feel like this portion of
+the project was actually useful, despite resulting in an unfinished product
+because I've always felt like Python was a great 
+go-to language for small chunks of code where performance doesn't matter, and now I can 
+actually make my Python code useful to future-selfs by making it modular. Also, I learned that SciPy can
+do some really cool things that I'm sure I will use to satisfy my mathematical curiosities 
+in the future.
+
+That's a lot of positivity for a section labelled "The Bad", but Spaghetti Western naming schemes aside,
+the fact is that Math currently parses files, and then does nothing to them (the semantics simply prints 
+out the AST it parsed). I think I got a lot of productive work done, in that learning how to set things
+up was a necessary part of the project, but that is a lot of stated goals that were not accomplished.
+
+### The Ugly
+
+I am not even particularly happy with the current state of the syntax for the Math language.
+I do not think it is easily extensible to large numbers of decks, or even different output formats. The 
+syntax will probably undergo a significant overhaul at some point in the future in order to make it comply 
+with my stated goals of a flexible, powerful probability-calculation language on decks. Right now, it is neither
+flexible, nor powerful, although I did make strides towards flexibility with the "Definitions scheme."
+
+Also, although I believe it only requires another hour max of work (that will have to wait until after finals week),
+Math won't even build Deck files currently, which was the entire original purpose of the pair of DSLs, where Deck would
+pipe a deck into Math so that the calculations could be performed.
+
+## And A Little Bit More (A final notebook entry)
+
+Overall, with help from critique partners and an average of about 7 hours weekly of work, I was very impressed
+with how much actually got done in a semester. My initial goals were a little lofty, given the intensely complicated
+nature of probabilitic calculations (as pointed out by Nathan in his final critique). I think I greatly underestimated
+the amount of ramp-up that is necessary at the beginning of a new project. Therefore, when I look back at my 5-week plan
+from the start of the semester, I'm actually happy that I got through more than 3 weeks worth of it.
+
+I never ran into any issue that blocked me for more than an hour or two, and along the way I solved a number of problems 
+that, while they had been solved by others before, I found quite interesting. I fully intend to keep working on this DSL 
+over winter break, and hopefully getting it to a point where I, and my friends, can use it as we travel around the country 
+to our MtG events. 
+
+Thank you for reading this long document on my experiences, and thanks for an opportunity to create a great and fun project!
 
