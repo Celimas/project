@@ -1,0 +1,43 @@
+(* Grako Grammar for Tyler Marklyn's Math Language *)
+
+math = comments decks definitions calculations ;
+
+(* Any amount of comments at the top of the file *)
+comments = { nonspace } ;
+
+(* Rules for importing decks *)
+decks = "Decks" ':' { @+:deck_name } ; 
+
+deck_name = alphanumeric ;
+
+(* Rules for defining named combinations *)
+definitions = "Definitions" ':' { @+:definition } ;
+
+definition = name:alphanumeric '=' sets:card_sets ;
+
+card_sets = set:card_set { with+:secondary_card_set } ;
+
+card_set = [ num:numeric 'x' ] '(' trait:alphanumeric ',' val:value ')' ;
+
+value = "Same" | "Different" | alphanumeric ;
+
+secondary_card_set = conj:conjunction set:card_set ;
+
+conjunction = "Seperate" | "Shared" | "Or" ;
+
+
+(* Rules for requesting calculations *)
+calculations = "Calculations" ':' { @+:calculation } ;
+
+calculation = '{' [ "Known" ':' known:calc_set ] 
+                  [ "Draws" ':' draws:numeric ]
+                  [ "Odds" ':' odds:calc_set ] '}' ;
+
+calc_set = ( variable:alphanumeric )
+         |   set:card_sets ;
+
+
+(* helper rules *)
+nonspace = /[^A-Z\s]+/ ;
+alphanumeric = /[a-z0-9]+/ ;
+numeric = /[0-9]+/ ;
