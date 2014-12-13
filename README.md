@@ -22,6 +22,9 @@ python DeckLanguage.py <path-to-deck-file>
 This will parse your deck, and print out the traits and cards as it creates
 them, with a breif summary of the entire deck at the end.
 
+Some sample deck files can be found in `samples/legacy_burn.deck` and
+`samples/bad_cards.deck`.
+
 **3. Using Math**
 If you want to get the full functionality out of Deck and Math, you
 can run the following command from the root of the repo
@@ -31,6 +34,8 @@ python MathLanguage.py <path-to-math-file>
 This will run your math file, which involves first parsing all of the deck
 files named as decks at the top of the .math file, and then performing
 your math queries on these decks.
+
+There is a sample math file in `samples/bad_poker.math`.
 
 Unfortunately, at this time Math is not fully implemented, so all this command will do is
 parse the .math file without doing anything else.
